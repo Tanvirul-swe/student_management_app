@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_management/config/routes/route_generator.dart';
+import 'package:student_management/presentation/pages/student_list.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute:'/StudentList',
+      home: const StudentList(),
     );
   }
 }
