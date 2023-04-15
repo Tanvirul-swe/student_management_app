@@ -48,6 +48,13 @@ class DatabaseHelper {
   static const String columnDateOfBirth = 'date_of_birth';
   static const String columnClass = 'class';
 
+  // course Table
+  static const String courseTable = 'course';
+  static const String columnCourseId = 'course_id';
+  static const String columnCourseName = 'course_name';
+  static const String columnFacultyName = 'faculty_name';
+  static const String columnCredit = 'credit';
+
   Future _onCreate(Database db, int version) async {
     try {
       await db.execute('''
@@ -60,6 +67,16 @@ class DatabaseHelper {
           $columnMobileNumber TEXT NOT NULL,
           $columnDateOfBirth INT NOT NULL,
           $columnClass INT NOT NULL
+        )
+      ''');
+
+      await db.execute('''
+        CREATE TABLE $courseTable(
+          $columnId INTEGER PRIMARY KEY,
+          $columnCourseId TEXT NOT NULL,
+          $columnCourseName TEXT NOT NULL,
+          $columnFacultyName TEXT NOT NULL,
+          $columnCredit INT NOT NULL
         )
       ''');
     } catch (e) {

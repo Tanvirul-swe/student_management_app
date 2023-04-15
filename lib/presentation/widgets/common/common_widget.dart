@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_management/config/constant/app_colors.dart';
 
+final List<String> searchSuggestion = [];
 void showCustomSnackBar(BuildContext context, String message,
     {bool isError = false}) {
   if (message.isNotEmpty) {
@@ -14,4 +15,26 @@ void showCustomSnackBar(BuildContext context, String message,
         content: Text(message,
             style: const TextStyle(fontSize: 15, color: AppColors.white))));
   }
+}
+
+Widget errorText() {
+  return const Center(
+      child: Text(
+    "Something went wrong",
+    style: TextStyle(color: Colors.red),
+  ));
+}
+
+Widget loadingIndicator() {
+  return const Center(
+    child: CircularProgressIndicator(),
+  );
+}
+
+Widget emptyView({required String message}) {
+  return Center(
+      child: Text(
+    message,
+    style: const TextStyle(color: Colors.red),
+  ));
 }
