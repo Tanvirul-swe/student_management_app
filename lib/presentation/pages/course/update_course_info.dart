@@ -8,14 +8,15 @@ import 'package:student_management/presentation/widgets/button/primery_button.da
 import 'package:student_management/presentation/widgets/common/common_widget.dart';
 import 'package:student_management/presentation/widgets/textField/text_field_style.dart';
 
-class CourseCreateForm extends StatefulWidget {
-  const CourseCreateForm({super.key});
+class UpdateCourseInfo extends StatefulWidget {
+  final int localId;
+  const UpdateCourseInfo({super.key, required this.localId});
 
   @override
-  State<CourseCreateForm> createState() => _CourseCreateFormState();
+  State<UpdateCourseInfo> createState() => _UpdateCourseInfoState();
 }
 
-class _CourseCreateFormState extends State<CourseCreateForm> {
+class _UpdateCourseInfoState extends State<UpdateCourseInfo> {
   final TextEditingController courseNameController = TextEditingController();
 
   final TextEditingController courseIdController = TextEditingController();
@@ -26,6 +27,8 @@ class _CourseCreateFormState extends State<CourseCreateForm> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  DateTime? pickedDate;
+  String selectedSubj = "";
 
   bool _validateForm() {
     bool isValid = formKey.currentState!.validate();
@@ -33,8 +36,23 @@ class _CourseCreateFormState extends State<CourseCreateForm> {
     return isValid;
   }
 
-  DateTime? pickedDate;
-  String selectedSubj = "";
+  Future<void> loadCourseInfo() async {
+    final course =
+        await StudentRepository.getCourseById(localId: widget.localId);
+    setState(() {
+      courseNameController.text = course.courseName;
+      courseIdController.text = course.courseCode;
+      courseFacultyController.text = course.facultyName;
+      creditController.text = course.credit.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    loadCourseInfo();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -43,29 +61,27 @@ class _CourseCreateFormState extends State<CourseCreateForm> {
         appBar: AppBar(
           backgroundColor: AppColors.primaryColor,
           title: const Text(
-            'Create Course',
+            'Update Course info',
           ),
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(8.0),
           child: PrimaryButton(
-            name: 'Save',
+            name: 'Update',
             onPressed: () {
               if (_validateForm()) {
-                StudentRepository.insertCourse(
-                  CourseModel(
+                StudentRepository.updateCourse(
+                  model: CourseModel(
                     courseName: courseNameController.text,
                     courseCode: courseIdController.text,
                     facultyName: courseFacultyController.text,
                     credit: int.parse(creditController.text),
                   ),
+                  localId: widget.localId,
                 ).then((value) {
-                  if (value != null) {
-                    showCustomSnackBar(context, "Course Create Successfully");
-                    Navigator.pushReplacementNamed(
-                      context,
-                      '/CourseList',
-                    );
+                  if (value > 0) {
+                    showCustomSnackBar(context, "Course Update Successfully");
+                    Navigator.pop(context, true);
                   } else {
                     showCustomSnackBar(context, "Course Code Already Exist");
                   }

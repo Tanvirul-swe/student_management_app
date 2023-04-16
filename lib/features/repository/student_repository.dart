@@ -5,11 +5,13 @@ import 'package:student_management/features/model/student_model.dart';
 import 'package:student_management/presentation/widgets/common/common_widget.dart';
 
 class StudentRepository {
+  /// This method is used to insert student data into local database
   static Future<int> insertStudent(StudentModel student) async {
     Database? db = await DatabaseHelper.instance.database();
     return await db!.insert(DatabaseHelper.studentTable, student.toMap());
   }
 
+  /// This method is used to get student all data from local database
   Future<List<StudentModel>> getAllStudentList() async {
     Database? db = await DatabaseHelper.instance.database();
     List<Map<String, dynamic>> result =
@@ -17,6 +19,7 @@ class StudentRepository {
     return result.map((e) => StudentModel.fromLocalDB(e)).toList();
   }
 
+  /// This method is used to insert course data into local database
   static Future<CourseModel?> insertCourse(CourseModel model) async {
     Database? db = await DatabaseHelper.instance.database();
     var hasData = await db!.query(DatabaseHelper.courseTable,
@@ -29,6 +32,21 @@ class StudentRepository {
     return null;
   }
 
+  // This method is used to update course data into local database
+  static Future<int> updateCourse(
+      {required CourseModel model, required int localId}) async {
+    Database? db = await DatabaseHelper.instance.database();
+    var hasData = await db!.query(DatabaseHelper.courseTable,
+        where: '${DatabaseHelper.columnCourseId} = ?',
+        whereArgs: [model.courseCode]);
+    if (hasData.isEmpty) {
+      return await db.update(DatabaseHelper.courseTable, model.toMap(),
+          where: '${DatabaseHelper.columnId} = ?', whereArgs: [localId]);
+    }
+    return 0;
+  }
+
+  /// This method is used to get all course list from local database
   static Future<List<CourseModel>> getAllCourseList() async {
     Database? db = await DatabaseHelper.instance.database();
     List<Map<String, dynamic>> result =
@@ -55,5 +73,16 @@ class StudentRepository {
       temp.add(element.name);
     }
     return temp;
+  }
+
+  // This method is used to get course data by id from local database
+  static Future<CourseModel> getCourseById({required int localId}) async {
+    Database? db = await DatabaseHelper.instance.database();
+    List<Map<String, dynamic>> result = await db!.query(
+      DatabaseHelper.courseTable,
+      where: '${DatabaseHelper.columnId} = ?',
+      whereArgs: [localId],
+    );
+    return CourseModel.fromLocalDB(result.first);
   }
 }

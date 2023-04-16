@@ -4,6 +4,7 @@ import 'package:student_management/features/model/student_model.dart';
 import 'package:student_management/presentation/pages/course/course_create_insert_form.dart';
 import 'package:student_management/presentation/pages/course/course_details.dart';
 import 'package:student_management/presentation/pages/course/course_list.dart';
+import 'package:student_management/presentation/pages/course/update_course_info.dart';
 import 'package:student_management/presentation/pages/error_screen.dart';
 import 'package:student_management/presentation/pages/student_data_insert_form.dart';
 import 'package:student_management/presentation/pages/student_details.dart';
@@ -18,15 +19,20 @@ class RouteGenerator {
       case '/CourseCreateForm':
         return MaterialPageRoute(builder: (_) => const CourseCreateForm());
 
-        case '/CourseDetails':
+      case '/CourseDetails':
         return MaterialPageRoute(
             builder: (_) => CourseDetails(
                   model: args as CourseModel,
                 ));
-     case '/CourseList':
+      case '/CourseList':
         return MaterialPageRoute(builder: (_) => const CourseList());
       case '/StudentDataInsertForm':
         return MaterialPageRoute(builder: (_) => const StudentDataInsertForm());
+      case '/UpdateCourseInfo':
+        return MaterialPageRoute(
+            builder: (_) => UpdateCourseInfo(
+                  localId: args as int,
+                ));
       case '/StudentDetails':
         return MaterialPageRoute(
             builder: (_) => StudentDetails(
