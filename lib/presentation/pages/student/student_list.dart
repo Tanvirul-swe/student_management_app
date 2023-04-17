@@ -95,10 +95,8 @@ class _StudentListState extends State<StudentList> {
                           arguments: data[index]);
                     },
                     child: StudentListCard(
-                        model: data[index],
-                        studentBloc: StudentBloc(
-                          RepositoryProvider.of<StudentRepository>(context),
-                        )..add(StudentLoadEvent())),
+                      model: data[index],
+                    ),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>

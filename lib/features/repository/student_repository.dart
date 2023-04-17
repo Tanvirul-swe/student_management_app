@@ -66,7 +66,7 @@ class StudentRepository {
   }
 
   /// This method is used to get all course list from local database
-  static Future<List<CourseModel>> getAllCourseList() async {
+   Future<List<CourseModel>> getAllCourseList() async {
     Database? db = await DatabaseHelper.instance.database();
     List<Map<String, dynamic>> result =
         await db!.query(DatabaseHelper.courseTable);

@@ -9,16 +9,13 @@ import 'package:student_management/core/util/date_time_convert.dart';
 import 'package:student_management/features/model/student_model.dart';
 import 'package:student_management/presentation/bloc/student/bloc/student_bloc.dart';
 
-class StudentListCard extends StatefulWidget {
+class StudentListCard extends StatelessWidget {
   StudentModel model;
-  StudentBloc studentBloc;
-  StudentListCard({super.key, required this.model, required this.studentBloc});
+  StudentListCard({
+    super.key,
+    required this.model,
+  });
 
-  @override
-  State<StudentListCard> createState() => _StudentListCardState();
-}
-
-class _StudentListCardState extends State<StudentListCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +36,7 @@ class _StudentListCardState extends State<StudentListCard> {
             child: IconButton(
                 onPressed: () async {
                   await Navigator.pushNamed(context, '/UpdateStudentInfo',
-                          arguments: widget.model.id)
+                          arguments: model.id)
                       .then((value) {
                     if (value != null && value as bool) {
                       context.read<StudentBloc>().add(StudentLoadEvent());
@@ -55,20 +52,20 @@ class _StudentListCardState extends State<StudentListCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "ID : ${widget.model.studentid}",
+                "ID : ${model.studentid}",
                 style: AppStyle.title,
               ),
               Text(
-                "Name : ${widget.model.name}",
+                "Name : ${model.name}",
                 style: AppStyle.title,
               ),
               Text(
                 DateTimeConverter.millisecondToRealDate(
-                    millisecond: widget.model.dateofbirth),
+                    millisecond: model.dateofbirth),
                 style: AppStyle.subtitle,
               ),
               Text(
-                "Class : ${widget.model.classNo}",
+                "Class : ${model.classNo}",
                 style: AppStyle.subtitle,
               ),
             ],

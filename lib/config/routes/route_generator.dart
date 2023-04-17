@@ -32,7 +32,11 @@ class RouteGenerator {
                   model: args as CourseModel,
                 ));
       case '/CourseList':
-        return MaterialPageRoute(builder: (_) => const CourseList());
+        return MaterialPageRoute(
+            builder: (_) =>  RepositoryProvider(
+                  create: (context) => StudentRepository(),
+                  child: const CourseList(),
+                ));
       case '/StudentDataInsertForm':
         return MaterialPageRoute(builder: (_) => const StudentDataInsertForm());
       case '/UpdateStudentInfo':

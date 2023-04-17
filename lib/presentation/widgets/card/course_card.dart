@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_management/config/constant/app_colors.dart';
 import 'package:student_management/config/constant/app_style.dart';
 import 'package:student_management/config/constant/size_config.dart';
 import 'package:student_management/features/model/course_model.dart';
+import 'package:student_management/presentation/bloc/course/bloc/course_bloc.dart';
 
-class CourseCard extends StatefulWidget {
+class CourseCard extends StatelessWidget {
   final CourseModel model;
-  const CourseCard({super.key, required this.model});
+  // final CourseBloc courseBloc;
+  const CourseCard({super.key, required this.model,});
 
-  @override
-  State<CourseCard> createState() => _CourseCardState();
-}
-
-class _CourseCardState extends State<CourseCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,10 +31,10 @@ class _CourseCardState extends State<CourseCard> {
               child: IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/UpdateCourseInfo',
-                            arguments: widget.model.id)
+                            arguments: model.id)
                         .then((value) {
                       if (value != null && value as bool) {
-                        setState(() {});
+                        context.read<CourseBloc>().add(CourseLoadEvent());
                       }
                     });
                   },
@@ -48,15 +46,15 @@ class _CourseCardState extends State<CourseCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Course Name : ${widget.model.courseName}",
+                "Course Name : ${model.courseName}",
                 style: AppStyle.title,
               ),
               Text(
-                "Course Code : ${widget.model.courseCode}",
+                "Course Code : ${model.courseCode}",
                 style: AppStyle.title,
               ),
               Text(
-                "Course Credit : ${widget.model.credit}",
+                "Course Credit : ${model.credit}",
                 style: AppStyle.subtitle,
               ),
             ],
