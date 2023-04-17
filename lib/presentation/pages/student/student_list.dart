@@ -1,11 +1,12 @@
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_management/config/constant/app_colors.dart';
 import 'package:student_management/config/constant/app_style.dart';
 import 'package:student_management/config/constant/size_config.dart';
 import 'package:student_management/features/model/student_model.dart';
 import 'package:student_management/features/repository/student_repository.dart';
+import 'package:student_management/presentation/bloc/student/bloc/student_bloc.dart';
 import 'package:student_management/presentation/widgets/card/student_list_card.dart';
 import 'package:student_management/presentation/widgets/common/common_widget.dart';
 
@@ -71,43 +72,49 @@ class _StudentListState extends State<StudentList> {
           ),
         ),
       ),
-      body: FutureBuilder<List<StudentModel>>(
-          future: StudentRepository().getAllStudentList(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+      body: BlocProvider(
+        create: (context) => StudentBloc(
+          RepositoryProvider.of<StudentRepository>(context),
+        )..add(StudentLoadEvent()),
+        child: BlocBuilder<StudentBloc, StudentState>(
+          builder: (context, state) {
+            if (state is StudentLoading) {
               return loadingIndicator();
-            } else if (snapshot.hasError) {
+            } else if (state is StudentErrorState) {
               return const Center(child: Text('Something went wrong'));
-            } else if (snapshot.data!.isEmpty) {
-              return emptyView(message: "No Student At this moment");
+            } else if (state is StudentLoaded) {
+              List<StudentModel> data = state.student;
+              return ListView.separated(
+                padding: const EdgeInsets.all(8),
+                physics: const BouncingScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/StudentDetails',
+                          arguments: data[index]);
+                    },
+                    child: StudentListCard(
+                        model: data[index],
+                        studentBloc: StudentBloc(
+                          RepositoryProvider.of<StudentRepository>(context),
+                        )..add(StudentLoadEvent())),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(
+                  height: 10,
+                ),
+              );
             }
-
-            List<StudentModel> studentList = snapshot.data!;
-            return ListView.separated(
-              padding: const EdgeInsets.all(8),
-              physics: const BouncingScrollPhysics(),
-              itemCount: studentList.length,
-              itemBuilder: (BuildContext context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/StudentDetails',
-                        arguments: studentList[index]);
-                  },
-                  child: StudentListCard(
-                    model: studentList[index],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                height: 10,
-              ),
-            );
-          }),
+            return emptyView(message: "No Student At this moment");
+          },
+        ),
+      ),
     );
   }
 
-  menuItems(String title, int index) {
+  ListTile menuItems(String title, int index) {
     return ListTile(
       trailing: const Icon(
         Icons.arrow_forward_ios,

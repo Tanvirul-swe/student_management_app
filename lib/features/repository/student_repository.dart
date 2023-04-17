@@ -11,12 +11,31 @@ class StudentRepository {
     return await db!.insert(DatabaseHelper.studentTable, student.toMap());
   }
 
+// This method is used to update student data into local database
+  static Future<int> updateStudentInfo(
+      {required StudentModel student, required int localId}) async {
+    Database? db = await DatabaseHelper.instance.database();
+    return await db!.update(DatabaseHelper.studentTable, student.toMap(),
+        where: '${DatabaseHelper.columnId} = ?', whereArgs: [localId]);
+  }
+
   /// This method is used to get student all data from local database
   Future<List<StudentModel>> getAllStudentList() async {
     Database? db = await DatabaseHelper.instance.database();
     List<Map<String, dynamic>> result =
         await db!.query(DatabaseHelper.studentTable);
     return result.map((e) => StudentModel.fromLocalDB(e)).toList();
+  }
+
+  // This method is used to get student data by id from local database
+  static Future<StudentModel> getStudentById({required int localId}) async {
+    Database? db = await DatabaseHelper.instance.database();
+    List<Map<String, dynamic>> result = await db!.query(
+      DatabaseHelper.studentTable,
+      where: '${DatabaseHelper.columnId} = ?',
+      whereArgs: [localId],
+    );
+    return StudentModel.fromLocalDB(result.first);
   }
 
   /// This method is used to insert course data into local database

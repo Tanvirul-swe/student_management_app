@@ -33,11 +33,12 @@ class _CourseCardState extends State<CourseCard> {
               child: IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/UpdateCourseInfo',
-                        arguments: widget.model.id).then((value) {
-                          if(value != null && value as bool){
-                            setState(() {});
-                          }
-                        });
+                            arguments: widget.model.id)
+                        .then((value) {
+                      if (value != null && value as bool) {
+                        setState(() {});
+                      }
+                    });
                   },
                   icon: const Icon(
                     Icons.edit,

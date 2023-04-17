@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_management/config/routes/route_generator.dart';
-import 'package:student_management/presentation/pages/student_list.dart';
+import 'package:student_management/features/repository/student_repository.dart';
+import 'package:student_management/presentation/pages/student/student_list.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,10 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.generateRoute,
-      home: const StudentList(),
+      home:  RepositoryProvider(
+        create: (context) => StudentRepository(),
+        child: const StudentList(),
+      ),
     );
   }
 }

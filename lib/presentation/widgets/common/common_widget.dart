@@ -38,3 +38,36 @@ Widget emptyView({required String message}) {
     style: const TextStyle(color: Colors.red),
   ));
 }
+Future<DateTime?> customDateTimePicker(BuildContext context) async {
+  final DateTime? picked = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(1920),
+    lastDate: DateTime.now(),
+    builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: ThemeData(
+          primarySwatch: Colors.grey,
+          splashColor: Colors.black,
+          textTheme: const TextTheme(
+            titleMedium: TextStyle(color: Colors.black),
+            labelLarge: TextStyle(color: Colors.black),
+          ),
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.primaryColor,
+            primaryContainer: Colors.black,
+            secondaryContainer: Colors.black,
+            onSecondary: Colors.black,
+            onPrimary: Colors.white,
+            surface: Colors.black,
+            onSurface: Colors.black,
+            secondary: Colors.black,
+          ),
+          dialogBackgroundColor: Colors.white,
+        ),
+        child: child ?? const Text(""),
+      );
+    },
+  );
+  return picked;
+}

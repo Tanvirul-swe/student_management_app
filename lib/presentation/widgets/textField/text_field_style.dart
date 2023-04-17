@@ -24,3 +24,25 @@ final KtextField = InputDecoration(
     ),
   ),
 );
+
+var dateTimeInputDecoration = InputDecoration(
+    suffixIcon: const Icon(
+      Icons.calendar_month_rounded,
+      color: Colors.black,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(
+        color: AppColors.primaryColor,
+      ),
+    ),
+    labelStyle:
+        const TextStyle(fontFamily: 'Nunito', color: AppColors.primaryColor),
+    contentPadding: const EdgeInsets.only(left: 21, top: 10, bottom: 10),
+    focusColor: AppColors.primaryColor,
+    //icon of text field
+    labelText: "Date of Birth" //label text of field
+    );

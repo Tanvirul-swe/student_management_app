@@ -147,62 +147,11 @@ class _StudentDataInsertFormState extends State<StudentDataInsertForm> {
                   ),
                   TextFormField(
                     controller: dateOfBirthController,
-                    decoration: InputDecoration(
-                        suffixIcon: const Icon(
-                          Icons.calendar_month_rounded,
-                          color: Colors.black,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        labelStyle: const TextStyle(
-                            fontFamily: 'Nunito',
-                            color: AppColors.primaryColor),
-                        contentPadding: const EdgeInsets.only(
-                            left: 21, top: 10, bottom: 10),
-                        focusColor: AppColors.primaryColor,
-                        //icon of text field
-                        labelText: "Date of Birth" //label text of field
-                        ),
+                    decoration: dateTimeInputDecoration,
                     readOnly: true,
                     //set it true, so that user will not able to edit text
                     onTap: () async {
-                      pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1920),
-                        lastDate: DateTime.now(),
-                        builder: (BuildContext context, Widget? child) {
-                          return Theme(
-                            data: ThemeData(
-                              primarySwatch: Colors.grey,
-                              splashColor: Colors.black,
-                              textTheme: const TextTheme(
-                                titleMedium: TextStyle(color: Colors.black),
-                                labelLarge: TextStyle(color: Colors.black),
-                              ),
-                              colorScheme: const ColorScheme.light(
-                                primary: AppColors.primaryColor,
-                                primaryContainer: Colors.black,
-                                secondaryContainer: Colors.black,
-                                onSecondary: Colors.black,
-                                onPrimary: Colors.white,
-                                surface: Colors.black,
-                                onSurface: Colors.black,
-                                secondary: Colors.black,
-                              ),
-                              dialogBackgroundColor: Colors.white,
-                            ),
-                            child: child ?? const Text(""),
-                          );
-                        },
-                      );
+                      pickedDate = await customDateTimePicker(context);
                       if (pickedDate != null) {
                         String formattedDate =
                             "${pickedDate!.day}-${pickedDate!.month}-${pickedDate!.year}";
